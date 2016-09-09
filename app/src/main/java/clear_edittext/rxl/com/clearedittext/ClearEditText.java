@@ -35,18 +35,17 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     private void init() {
         rightDrawable = getCompoundDrawables()[2];
         if (rightDrawable == null) {
-            rightDrawable = getResources().getDrawable(R.mipmap.ic_launcher);
+            rightDrawable = getResources().getDrawable(R.drawable.delete_icon);
         }
 
         // setBounds(x,y,width,height); x:组件在容器X轴上的起点 y:组件在容器Y轴上的起点 width:组件的宽度 height:组件的高度
+        // 必须为控件设置大小，否则drawable不显示
         // x/y 为EditText右侧的ImageView控件，不是EditText控件
         rightDrawable.setBounds(0, 0, rightDrawable.getIntrinsicWidth(), rightDrawable.getIntrinsicHeight());
 
-
-        setClearIconVisible(false);
+        setClearIconVisible(false); // 默认隐藏清除按钮
         setOnFocusChangeListener(this); // 设置焦点变化监听器
         addTextChangedListener(this); // 设置文字内容变化监听器
-
     }
 
     /**
@@ -63,6 +62,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             // 判断点击位置是否需要删除全部，getCompoundPaddingRight()得到的是控件padding + 右drawable的宽度
+            // getX() 在此得到的是触摸位置相对于控件左边缘的坐标
             int[] location = new int[]{0, 0};
             getLocationInWindow(location);
             boolean isClear = event.getX() > (getWidth() - getCompoundPaddingRight()) && event.getX() < (getWidth() - getPaddingRight())
